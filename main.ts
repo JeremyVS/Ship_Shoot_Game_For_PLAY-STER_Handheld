@@ -1,6 +1,30 @@
 namespace SpriteKind {
     export const Menu_Selecter = SpriteKind.create()
 }
+function Two_player_game (menu_selecter: Sprite) {
+    menu_selecter.destroy(effects.confetti, 500)
+    music.baDing.playUntilDone()
+    mySprite = sprites.create(img`
+        . . . . . . . 2 2 . . . . . . . 
+        . . . . . . . 2 2 . . . . . . . 
+        . . . . . . . 2 2 . . . . . . . 
+        . . . . . . . 2 2 . . . . . . . 
+        . . . . . . . 2 2 . . . . . . . 
+        . . . . . . 2 2 2 2 . . . . . . 
+        . . . . . 2 2 2 2 2 2 . . . . . 
+        . . . . 2 8 8 8 8 8 8 2 . . . . 
+        . . . 2 2 8 9 9 9 9 8 2 2 . . . 
+        . . . 2 2 8 9 9 9 9 8 2 2 . . . 
+        . . . 2 2 8 8 8 8 8 8 2 2 . . . 
+        . . . 2 2 2 2 2 2 2 2 2 2 . . . 
+        . . . . . . 7 7 7 7 . . . . . . 
+        . . . . . 7 7 7 7 7 7 . . . . . 
+        . . . . 4 4 4 4 4 4 4 4 . . . . 
+        . . . 4 4 4 4 4 4 4 4 4 4 . . . 
+        `, SpriteKind.Player)
+}
+let mySprite: Sprite = null
+let In_Menu1 = 0
 scene.setBackgroundImage(img`
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
@@ -369,7 +393,7 @@ scene.setBackgroundImage(img`
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
     `)
-let mySprite = sprites.create(img`
+mySprite = sprites.create(img`
     2 . . . . . . . . . . . . . . . 
     2 2 . . . . . . . . . . . . . . 
     . 2 2 . . . . . . . . . . . . . 
@@ -387,4 +411,24 @@ let mySprite = sprites.create(img`
     . 2 2 . . . . . . . . . . . . . 
     2 2 . . . . . . . . . . . . . . 
     `, SpriteKind.Menu_Selecter)
-mySprite.setPosition(42, 32)
+In_Menu1 = 1
+let Menu1_selecter = 0
+forever(function () {
+    if (In_Menu1 == 1) {
+        if (controller.up.isPressed()) {
+            Menu1_selecter = 0
+        }
+        if (controller.down.isPressed()) {
+            Menu1_selecter = 1
+        }
+        if (Menu1_selecter == 0) {
+            mySprite.setPosition(42, 32)
+        }
+        if (Menu1_selecter == 1) {
+            mySprite.setPosition(42, 55)
+            if (controller.A.isPressed()) {
+                Two_player_game(mySprite)
+            }
+        }
+    }
+})
