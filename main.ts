@@ -2,6 +2,29 @@ namespace SpriteKind {
     export const Menu_Selecter = SpriteKind.create()
     export const Player2 = SpriteKind.create()
 }
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (Players == 2) {
+        list.push(sprites.createProjectileFromSide(img`
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, 0, -60))
+        list[list.length - 1].setPosition(mySprite.x, mySprite.y)
+    }
+})
 function Two_player_game (menu_selecter: Sprite) {
     In_Menu1 = 0
     Players = 2
@@ -169,8 +192,18 @@ function Two_player_game (menu_selecter: Sprite) {
         `, SpriteKind.Player2)
     mySprite2.setPosition(114, 15)
     mySprite2.setFlag(SpriteFlag.StayInScreen, true)
+    list = []
+    info.player1.setLife(10)
+    info.player2.setLife(10)
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player2, function (sprite, otherSprite) {
+    if (Players == 2) {
+        info.player2.changeLifeBy(-1)
+        sprite.destroy()
+    }
+})
 let mySprite2: Sprite = null
+let list: Sprite[] = []
 let mySprite: Sprite = null
 let Players = 0
 let In_Menu1 = 0
@@ -588,6 +621,12 @@ forever(function () {
         }
         if (controller.right.isPressed()) {
             mySprite.x += 2
+        }
+        if (controller.A.isPressed()) {
+            mySprite2.x += 2
+        }
+        if (controller.B.isPressed()) {
+            mySprite2.x += -2
         }
     }
 })
