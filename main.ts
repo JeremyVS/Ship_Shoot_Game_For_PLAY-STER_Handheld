@@ -1,6 +1,7 @@
 namespace SpriteKind {
     export const Menu_Selecter = SpriteKind.create()
     export const Player2 = SpriteKind.create()
+    export const Player2shot = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     if (Players == 2) {
@@ -200,6 +201,48 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player2, function (sprite, o
     if (Players == 2) {
         info.player2.changeLifeBy(-1)
         sprite.destroy()
+    }
+})
+sprites.onOverlap(SpriteKind.Player2shot, SpriteKind.Player, function (sprite, otherSprite) {
+    if (Players == 2) {
+        info.player1.changeLifeBy(-1)
+        sprite.destroy()
+    }
+})
+info.player1.onLifeZero(function () {
+    if (Players == 2) {
+        game.splash("Player 2 wins!!!")
+        game.reset()
+    }
+})
+info.player2.onLifeZero(function () {
+    if (Players == 2) {
+        game.splash("Player 1 wins!!!")
+        game.reset()
+    }
+})
+controller.combos.attachCombo("A+B", function () {
+    if (Players == 2) {
+        list.push(sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            `, SpriteKind.Player2shot))
+        list[list.length - 1].setPosition(mySprite2.x, mySprite2.y)
+        list[list.length - 1].setVelocity(0, 60)
     }
 })
 let mySprite2: Sprite = null
